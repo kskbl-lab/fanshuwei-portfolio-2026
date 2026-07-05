@@ -1,0 +1,2 @@
+.gridscan{position:absolute;inset:0;overflow:hidden;background:radial-gradient(circle at 65% 40%,#172023 0,#0a0d0f 44%,#060708 78%)}
+.gridscan canvas{display:block;width:100%;height:100%}

@@ -1,0 +1,8 @@
+.hero-pill-nav{position:absolute;z-index:9;left:50%;bottom:24px;transform:translateX(-50%);width:min(680px,calc(100vw - 32px));padding:6px;border:1px solid #ffffff38;border-radius:999px;background:color-mix(in srgb,var(--base) 28%,transparent);box-shadow:0 12px 45px #0008;opacity:0}
+.hero-pill-nav .pill-list{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.hero-pill-nav .pill{height:42px;border-radius:999px;background:var(--pill-bg);color:var(--pill-text);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;font-size:12px;font-weight:600;letter-spacing:.08em}
+.hero-pill-nav .hover-circle{position:absolute;left:50%;border-radius:50%;background:var(--base);z-index:1;pointer-events:none}
+.hero-pill-nav .label-stack{position:relative;z-index:2;line-height:1;display:inline-block}
+.hero-pill-nav .pill-label{display:block}.hero-pill-nav .pill-label-hover{position:absolute;left:0;top:0;color:var(--hover-text);opacity:0;white-space:nowrap}
+.hero-pill-nav>small{position:absolute;left:50%;top:58px;transform:translateX(-50%);font-size:7px;letter-spacing:2px;white-space:nowrap;color:#858d89}
+@media(max-width:600px){.hero-pill-nav{bottom:18px}.hero-pill-nav .pill{height:38px;font-size:10px}.hero-pill-nav .pill-list{gap:3px}}
