@@ -60,3 +60,7 @@
 .sync-status{margin:-18px 0 22px;padding:12px 14px;border-radius:12px;background:#111;color:#f5f7f2;font-size:12px;letter-spacing:.4px;border:1px solid #242824}
 .sync-status.cloud{background:#10170f;border-color:#a9ff4255;color:#dfff9e;box-shadow:0 0 28px #c8ff3218 inset}
 .sync-status.local{background:#181818;color:#b9beb9}
+.editor-badge{margin:-18px 0 12px;padding:10px 13px;border-radius:12px;background:#d8ff70;color:#111;font-size:11px;font-weight:700;letter-spacing:.6px}
+.auth-error{margin:-4px 0 12px;padding:10px 13px;border-radius:12px;background:#ffe2df;color:#8f2119;font-size:11px;font-weight:700}
+.detail-description.readonly textarea{background:#f7f8f5;color:#4f5450;border-color:#d9dcd5;cursor:default}
+.detail-description.readonly textarea:focus{border-color:#d9dcd5;box-shadow:none}
