@@ -56,3 +56,7 @@
 
 .core-heading>p{max-width:540px;color:#c5cbc8;font-size:clamp(16px,1.05vw,20px);font-weight:500;line-height:1.65;letter-spacing:.01em}
 @media(min-width:901px){.core-heading>p{margin-right:clamp(70px,7vw,140px)}}
+
+.sync-status{margin:-18px 0 22px;padding:12px 14px;border-radius:12px;background:#111;color:#f5f7f2;font-size:12px;letter-spacing:.4px;border:1px solid #242824}
+.sync-status.cloud{background:#10170f;border-color:#a9ff4255;color:#dfff9e;box-shadow:0 0 28px #c8ff3218 inset}
+.sync-status.local{background:#181818;color:#b9beb9}
