@@ -1,4 +1,4 @@
-.hero-pill-nav{position:absolute;z-index:9;left:50%;bottom:24px;transform:translateX(-50%);width:min(680px,calc(100vw - 32px));padding:6px;border:1px solid #ffffff38;border-radius:999px;background:color-mix(in srgb,var(--base) 28%,transparent);box-shadow:0 12px 45px #0008;opacity:0}
+.hero-pill-nav{position:absolute;z-index:9;left:50%;bottom:24px;transform:translateX(-50%);width:min(680px,calc(100vw - 32px));padding:6px;border:1px solid #ffffff38;border-radius:999px;background:color-mix(in srgb,var(--base) 28%,transparent);box-shadow:0 12px 45px #0008;opacity:1;will-change:auto}
 .hero-pill-nav .pill-list{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
 .hero-pill-nav .pill{height:42px;border-radius:999px;background:var(--pill-bg);color:var(--pill-text);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;font-size:12px;font-weight:600;letter-spacing:.08em}
 .hero-pill-nav .hover-circle{position:absolute;left:50%;border-radius:50%;background:var(--base);z-index:1;pointer-events:none}
