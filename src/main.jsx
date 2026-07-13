@@ -57,13 +57,15 @@ groups.forEach(({section,title,description,buttons,cards,start='top 82%'})=>{con
  });return()=>ctx.revert()},[])}
 function useGlow(deps=[]){useEffect(()=>{const cards=document.querySelectorAll('.portrait,.core-preview-media,.mosaic-item,.cap-card,.timeline-item');cards.forEach(x=>x.classList.add('glow-card'));return()=>cards.forEach(x=>x.classList.remove('glow-card'))},deps)}
 function Media({src,type,className='',children,mode='preview'}){
+ const[loaded,setLoaded]=useState(!src)
  if(!src)return <div className={`media-placeholder ${className}`}>{children}</div>
+ const loading=<span className={`media-loading ${loaded?'is-hidden':''}`}>作品加载中…</span>
  if(type?.startsWith('video')){
   return mode==='player'
-   ? <video className={className} src={src} controls autoPlay playsInline preload="metadata"/>
-   : <video className={className} src={src} autoPlay muted loop playsInline preload="metadata"/>
+   ? <span className="media-frame">{loading}<video className={className} src={src} controls autoPlay playsInline preload="metadata" onLoadedData={()=>setLoaded(true)}/></span>
+   : <span className="media-frame">{loading}<video className={className} src={src} autoPlay muted loop playsInline preload="metadata" onLoadedData={()=>setLoaded(true)}/></span>
  }
- return <img className={className} src={src} alt="自定义作品素材"/>
+ return <span className="media-frame">{loading}<img className={className} src={src} alt="自定义作品素材" onLoad={()=>setLoaded(true)}/></span>
 }
 
 function App(){
