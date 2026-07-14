@@ -60,15 +60,34 @@ groups.forEach(({section,title,description,buttons,cards,start='top 82%'})=>{con
  });return()=>ctx.revert()},[])}
 function useGlow(deps=[]){useEffect(()=>{const cards=document.querySelectorAll('.portrait,.core-preview-media,.mosaic-item,.cap-card,.timeline-item');cards.forEach(x=>x.classList.add('glow-card'));return()=>cards.forEach(x=>x.classList.remove('glow-card'))},deps)}
 function Media({src,type,className='',children,mode='preview'}){
- const[loaded,setLoaded]=useState(!src)
+ const isVideo=type?.startsWith('video')
+ const frameRef=useRef(null),videoRef=useRef(null)
+ const[loaded,setLoaded]=useState(!src),[shouldLoad,setShouldLoad]=useState(mode==='player'||!isVideo),[inView,setInView]=useState(mode==='player')
+ useEffect(()=>{setLoaded(!src);setShouldLoad(mode==='player'||!isVideo);setInView(mode==='player')},[src,isVideo,mode])
+ useEffect(()=>{
+  if(mode==='player'||!isVideo||!src)return
+  const frame=frameRef.current
+  if(!frame||!('IntersectionObserver'in window)){setShouldLoad(true);setInView(true);return}
+  const loadObserver=new IntersectionObserver(([entry])=>{if(entry.isIntersecting){setShouldLoad(true);loadObserver.disconnect()}},{rootMargin:'280px 0px',threshold:0})
+  const playObserver=new IntersectionObserver(([entry])=>setInView(entry.isIntersecting),{rootMargin:'0px',threshold:.12})
+  loadObserver.observe(frame);playObserver.observe(frame)
+  return()=>{loadObserver.disconnect();playObserver.disconnect()}
+ },[src,isVideo,mode])
+ useEffect(()=>{
+  if(mode==='player'||!isVideo||!shouldLoad)return
+  const video=videoRef.current
+  if(!video)return
+  if(inView)video.play().catch(()=>{})
+  else video.pause()
+ },[inView,shouldLoad,isVideo,mode])
  if(!src)return <div className={`media-placeholder ${className}`}>{children}</div>
  const loading=<span className={`media-loading ${loaded?'is-hidden':''}`}>作品加载中…</span>
- if(type?.startsWith('video')){
+ if(isVideo){
   return mode==='player'
-   ? <span className="media-frame">{loading}<video className={className} src={src} controls autoPlay playsInline preload="metadata" onLoadedData={()=>setLoaded(true)}/></span>
-   : <span className="media-frame">{loading}<video className={className} src={src} autoPlay muted loop playsInline preload="metadata" onLoadedData={()=>setLoaded(true)}/></span>
+   ? <span className="media-frame">{loading}<video ref={videoRef} className={className} src={src} controls autoPlay playsInline preload="auto" onLoadedData={()=>setLoaded(true)}/></span>
+   : <span ref={frameRef} className={`media-frame ${shouldLoad?(loaded?'is-loaded':'is-loading'):'is-deferred'}`}>{!loaded&&<span className="media-deferred-art">{children}</span>}{shouldLoad&&loading}<video ref={videoRef} className={className} src={shouldLoad?src:undefined} data-media-src={src} muted loop playsInline preload={shouldLoad?'metadata':'none'} onLoadedData={()=>setLoaded(true)} onCanPlay={()=>{if(inView)videoRef.current?.play().catch(()=>{})}}/></span>
  }
- return <span className="media-frame">{loading}<img className={className} src={src} alt="自定义作品素材" onLoad={()=>setLoaded(true)}/></span>
+ return <span className="media-frame">{loading}<img className={className} src={src} alt="自定义作品素材" loading={mode==='player'?'eager':'lazy'} decoding="async" onLoad={()=>setLoaded(true)}/></span>
 }
 
 function App(){
