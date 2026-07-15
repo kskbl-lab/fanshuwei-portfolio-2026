@@ -11,7 +11,9 @@
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
     <script>
-      if (window.location.hostname === 'kskbl-lab.github.io') {
+      const noTrack = new URLSearchParams(window.location.search).get('notrack') === '1'
+      window.__PORTFOLIO_NO_TRACK__ = noTrack
+      if (window.location.hostname === 'kskbl-lab.github.io' && !noTrack) {
         const analytics = document.createElement('script')
         analytics.type = 'module'
         analytics.src = 'https://static.cloudflareinsights.com/beacon.min.js'

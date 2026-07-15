@@ -1,0 +1,5 @@
+name = "fsw-portfolio-analytics"
+main = "visitor-analytics.js"
+compatibility_date = "2026-07-15"
+workers_dev = true
+account_id = "4e0c728a3a9e09b18282ee3b7eec783c"
