@@ -10,5 +10,14 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      if (window.location.hostname === 'kskbl-lab.github.io') {
+        const analytics = document.createElement('script')
+        analytics.type = 'module'
+        analytics.src = 'https://static.cloudflareinsights.com/beacon.min.js'
+        analytics.dataset.cfBeacon = '{"token":"3be90a2c36b940f3a112a87a96bd33f5"}'
+        document.head.appendChild(analytics)
+      }
+    </script>
   </body>
 </html>
