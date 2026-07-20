@@ -71,8 +71,8 @@ function Media({src,type,className='',children,mode='preview',onPlay,pending}){
   if(mode==='player'||!isVideo||!src)return
   const frame=frameRef.current
   if(!frame||!('IntersectionObserver'in window)){setShouldLoad(true);setInView(true);return}
-  const loadObserver=new IntersectionObserver(([entry])=>{if(entry.isIntersecting){setShouldLoad(true);loadObserver.disconnect()}},{rootMargin:'600px 0px',threshold:0})
-  const playObserver=new IntersectionObserver(([entry])=>setInView(entry.isIntersecting),{rootMargin:'0px',threshold:.12})
+  const loadObserver=new IntersectionObserver(([entry])=>{if(entry.isIntersecting){setShouldLoad(true);loadObserver.disconnect()}},{rootMargin:'380px 0px',threshold:0})
+  const playObserver=new IntersectionObserver(([entry])=>setInView(entry.isIntersecting),{rootMargin:'0px',threshold:.24})
   loadObserver.observe(frame);playObserver.observe(frame)
   return()=>{loadObserver.disconnect();playObserver.disconnect()}
  },[src,isVideo,mode])
@@ -88,7 +88,7 @@ function Media({src,type,className='',children,mode='preview',onPlay,pending}){
  if(isVideo){
   return mode==='player'
    ? <span className="media-frame">{loading}<video ref={videoRef} className={className} src={src} controls autoPlay playsInline preload="auto" onPlay={onPlay} onLoadedData={()=>setLoaded(true)}/></span>
-   : <span ref={frameRef} className={`media-frame ${shouldLoad?(loaded?'is-loaded':'is-loading'):'is-deferred'}`}>{!loaded&&<span className="media-deferred-art">{children}</span>}{loading}<video ref={videoRef} className={className} src={shouldLoad?src:undefined} data-media-src={src} muted loop playsInline preload={shouldLoad?'auto':'none'} onPlaying={()=>setLoaded(true)} onCanPlay={()=>{if(inView)videoRef.current?.play().catch(()=>{})}}/></span>
+   : <span ref={frameRef} className={`media-frame ${shouldLoad?(loaded?'is-loaded':'is-loading'):'is-deferred'}`}>{!loaded&&<span className="media-deferred-art">{children}</span>}{loading}<video ref={videoRef} className={className} src={shouldLoad?src:undefined} data-media-src={src} muted loop playsInline preload={shouldLoad?(inView?'auto':'metadata'):'none'} onPlaying={()=>setLoaded(true)} onCanPlay={()=>{if(inView)videoRef.current?.play().catch(()=>{})}}/></span>
  }
  return <span className={`media-frame ${loaded?'is-loaded':'is-loading'}`}>{loading}<img className={className} src={src} alt="自定义作品素材" loading={mode==='player'?'eager':'lazy'} decoding="async" onLoad={()=>setLoaded(true)}/></span>
 }
