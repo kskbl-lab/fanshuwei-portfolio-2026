@@ -4,9 +4,11 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host 0.0.0.0",
-    "build": "vite build",
-    "preview": "vite preview --host 0.0.0.0"
+    "dev": "node scripts/preview.cjs",
+    "build": "node scripts/build.mjs",
+    "preview": "vite preview --host 0.0.0.0",
+    "build:legacy": "vite build",
+    "dev:legacy": "vite --host 0.0.0.0"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.110.0",

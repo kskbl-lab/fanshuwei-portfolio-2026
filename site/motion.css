@@ -1,0 +1,6 @@
+/* Content stays visible without JavaScript; only registered modules are prepared. */
+.motion-pending{opacity:0;translate:0 24px}
+.motion-pending:focus-within{opacity:1;translate:none}
+@media(max-width:640px){.motion-pending{translate:0 16px}}
+@media(prefers-reduced-motion:reduce){.motion-pending{opacity:1;translate:none}}
+@media print{.motion-pending{opacity:1;translate:none}}

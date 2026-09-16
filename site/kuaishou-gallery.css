@@ -1,0 +1,22 @@
+/* Reference: the user's original rounded, edge-to-edge four-column gallery. */
+body[data-page=kuaishou] .wrap{max-width:1800px;padding-inline:clamp(20px,4vw,72px)}
+body[data-page=kuaishou] .media-grid.masonry{--masonry-columns:4;--masonry-gap:16px;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+body[data-page=kuaishou] .masonry .media-card{border-radius:20px;isolation:isolate}
+body[data-page=kuaishou] .media-grid.masonry .media-card .media-preview{border:0;border-radius:20px;background:#101312;box-shadow:0 8px 28px #0003;outline:1px solid #ffffff09;outline-offset:-1px}
+body[data-page=kuaishou] .media-grid.masonry .media-card:hover .media-preview,body[data-page=kuaishou] .media-grid.masonry .media-card:focus-visible .media-preview{outline-color:#d3ff3670;box-shadow:0 9px 32px #0006}
+body[data-page=kuaishou] .media-grid.masonry .media-card .media-preview>img{transition:transform .45s;min-height:130px;object-fit:contain}
+body[data-page=kuaishou] .media-grid.masonry .media-card:hover .media-preview>img{transform:scale(1.025)}
+.reference-caption{position:absolute;inset:auto 0 0;z-index:4;padding:44px 18px 17px;background:linear-gradient(transparent,#0009 54%,#000d);pointer-events:none}
+body[data-page=kuaishou] .masonry .reference-caption p{font-size:10px;line-height:1.6;color:#e0e4dfb8;margin:0 0 5px;text-shadow:0 1px 5px #000}
+body[data-page=kuaishou] .masonry .reference-caption h4{font-size:18px;font-weight:600;line-height:1.4;margin:0;color:#f5f6f1;gap:12px;align-items:flex-end;text-shadow:0 1px 7px #0008}
+body[data-page=kuaishou] .masonry .reference-caption h4 span{font-size:24px;line-height:1.15;color:#e9eee4;font-weight:400;flex-shrink:0}
+body[data-page=kuaishou] .masonry .media-card:hover .reference-caption h4 span{color:var(--accent)}
+body[data-page=kuaishou] .masonry .media-shade,body[data-page=kuaishou] .masonry .media-badge{display:none}
+body[data-page=kuaishou] .masonry .play-icon{left:auto;right:13px;bottom:auto;top:13px;width:30px;height:30px;font-size:10px;opacity:0;transition:opacity .2s;background:#0b100b80}
+body[data-page=kuaishou] .masonry .duration{right:53px;bottom:auto;top:22px;opacity:0;transition:opacity .2s;font-size:10px}
+body[data-page=kuaishou] .masonry .media-card:hover .play-icon,body[data-page=kuaishou] .masonry .media-card:hover .duration,body[data-page=kuaishou] .masonry .media-card:focus-visible .play-icon,body[data-page=kuaishou] .masonry .media-card:focus-visible .duration{opacity:1}
+body[data-page=kuaishou] #gallery-works{margin-top:0}
+@media(max-width:1100px){body[data-page=kuaishou] .media-grid.masonry{--masonry-columns:3;grid-template-columns:repeat(3,minmax(0,1fr))}.reference-caption{padding:40px 15px 15px}body[data-page=kuaishou] .masonry .reference-caption h4{font-size:16px}}
+@media(max-width:760px){body[data-page=kuaishou] .media-grid.masonry{--masonry-columns:2;--masonry-gap:12px;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}body[data-page=kuaishou] .media-grid.masonry .media-card .media-preview{border-radius:15px}.reference-caption{padding:34px 12px 12px}body[data-page=kuaishou] .masonry .reference-caption h4{font-size:14px}body[data-page=kuaishou] .masonry .reference-caption p{font-size:9px}body[data-page=kuaishou] .masonry .reference-caption h4 span{font-size:20px}}
+@media(max-width:420px){.reference-caption{padding:30px 10px 10px}body[data-page=kuaishou] .masonry .reference-caption h4{font-size:12px;gap:5px}body[data-page=kuaishou] .masonry .reference-caption p{font-size:8px}body[data-page=kuaishou] .media-grid.masonry .media-card .media-preview>img{min-height:125px}body[data-page=kuaishou] .masonry .reference-caption h4 span{font-size:18px}}
+@media(max-width:360px){body[data-page=kuaishou] .media-grid.masonry{--masonry-columns:1;grid-template-columns:minmax(0,1fr)}body[data-page=kuaishou] .masonry .reference-caption h4{font-size:17px}body[data-page=kuaishou] .masonry .reference-caption p{font-size:10px}.reference-caption{padding:38px 16px 16px}}

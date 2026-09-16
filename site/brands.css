@@ -1,0 +1,30 @@
+/* Company × product identities, using the user's supplied logo files. */
+.experience-art.brand-art{height:320px;min-height:320px}
+.brand-art:after{pointer-events:none}
+.brand-art .art-word{font-size:25px;top:22px;left:26px}
+.brand-art .art-word small{font-size:9px;letter-spacing:1.7px;margin-top:8px}
+.brand-lockup{display:flex;align-items:center;justify-content:center;gap:24px;position:relative;z-index:2;padding:0 24px}
+.brand-art .brand-lockup{position:absolute;inset:92px 0 54px}
+.brand-tile{display:flex;flex-direction:column;align-items:center;min-width:0;gap:9px;animation:brand-float 6s ease-in-out infinite}
+.brand-tile img{width:clamp(68px,7.5vw,102px);height:auto;aspect-ratio:1;object-fit:contain;border-radius:23%;border:1px solid #ffffff26;box-shadow:0 12px 26px #0005;transition:transform .35s,box-shadow .35s;display:block}
+.brand-tile span{font-size:12px;font-weight:600;white-space:nowrap;color:#ecf0ec}
+.brand-tile small{font-size:9px;color:#a5ada9;line-height:1.5;white-space:nowrap;margin-top:-5px}
+.brand-tile:last-child{animation-delay:-2.8s}
+.brand-products{display:flex;align-items:center;gap:18px}
+.brand-products .brand-tile:first-child{animation-delay:-1.4s}
+.brand-cross{font-size:29px;font-weight:300;color:#becbbd;margin-top:-38px;flex-shrink:0}
+.brand-lockup-three{gap:18px}
+.brand-lockup-three .brand-tile img{width:clamp(60px,6.5vw,88px)}
+.brand-art .art-tag{display:inline-block;bottom:18px;left:26px;font-size:8px;letter-spacing:.8px}
+.experience-card:hover .brand-tile img{transform:rotate(-3deg) scale(1.04);box-shadow:0 14px 30px #0006,0 0 22px #d3ff3614}
+.brand-visual{display:flex;align-items:center;justify-content:center}
+.brand-visual .brand-lockup{width:100%;padding-bottom:25px}
+.brand-visual .brand-tile img{position:static;object-fit:contain;width:clamp(70px,8vw,112px)}
+.brand-visual .brand-lockup-three .brand-tile img{width:clamp(62px,6.5vw,90px)}
+.product-icon.product-logo{overflow:hidden;padding:0;background:transparent}
+.product-logo img{display:block;width:100%;height:100%;object-fit:contain}
+@keyframes brand-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@media(max-width:1000px) and (min-width:641px){.brand-lockup-three{gap:12px;padding-inline:12px}.brand-products{gap:12px}.brand-lockup-three .brand-tile span{font-size:10px}.brand-lockup-three .brand-tile small{font-size:8px}}
+@media(max-width:640px){.experience-card{display:block}.experience-art.brand-art{height:290px;min-height:290px;border-right:0}.brand-art .art-word{display:block;font-size:23px}.brand-art .brand-lockup{inset:87px 0 48px;padding-inline:18px;gap:20px}.brand-tile img{width:88px}.brand-lockup-three .brand-tile img{width:70px}.brand-products{gap:14px}.brand-art .brand-lockup-three{gap:14px}.brand-cross{font-size:24px}.brand-tile span{font-size:11px}.brand-tile small{font-size:8px}.brand-art .art-tag{font-size:7px}.brand-visual .brand-lockup{gap:18px}.brand-visual .brand-lockup-three{gap:12px;padding-inline:12px}.brand-visual .brand-lockup-three .brand-tile img{width:66px}}
+@media(max-width:360px){.brand-lockup-three .brand-tile img{width:58px}.brand-lockup-three .brand-tile span{font-size:10px}.brand-products{gap:10px}.brand-art .brand-lockup-three{gap:11px}}
+@media(prefers-reduced-motion:reduce){.brand-tile{animation:none}.brand-tile img{transition:none}}

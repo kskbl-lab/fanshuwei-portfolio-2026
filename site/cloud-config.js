@@ -1,0 +1,1 @@
+window.PORTFOLIO_CLOUD={"url": "https://sszcngotuuylyuawhuzb.supabase.co", "key": "sb_publishable_R7ATKIk07OrGx2ZJf-xLlA_vfP6RWf2", "editorHash": "d615fee2eb9a2a2d2bc329cdf116d4d881073a8400dfbb963daaf0cf97c122ff", "release": "2026-09-16-draft14"};

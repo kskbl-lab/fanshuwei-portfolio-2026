@@ -1,0 +1,2 @@
+/* Keep the approved layout while removing local preview chrome. */
+body:not(.editor-unlocked) [data-edit],body:not(.editor-unlocked) [data-reorder]{display:none!important}

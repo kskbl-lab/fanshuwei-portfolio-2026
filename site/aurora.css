@@ -1,0 +1,17 @@
+/* First screen = navigation + Hero. Work begins on the next screen. */
+:root{--hero-chrome:114px;--page-width:100vw}
+body[data-page=index] .site-header{position:relative;z-index:2}
+.home-hero.portfolio-hero{min-height:max(510px,calc(100svh - var(--hero-chrome)));padding:70px 0 105px;margin-bottom:0}
+.home-hero.portfolio-hero h1{font-size:clamp(76px,7.4vw,112px);letter-spacing:-4px}
+.home-hero.portfolio-hero h1 span{margin-top:23px;letter-spacing:9px;font-size:18px}
+.portfolio-hero .hero-overline{margin-bottom:30px}.portfolio-hero .hero-role{margin-top:31px}.portfolio-hero .hero-actions{margin-top:36px}.portfolio-hero .hero-foot{bottom:33px}
+.hero-aurora{position:absolute;top:calc(-1 * var(--hero-chrome));bottom:0;left:calc((100% - var(--page-width)) / 2);width:var(--page-width);z-index:-1;pointer-events:none;overflow:hidden;background:radial-gradient(ellipse at 15% 15%,#7cff6715,transparent 52%),radial-gradient(ellipse at 80% 12%,#5227ff17,transparent 52%)}
+.aurora-canvas{display:block;width:100%;height:140%;opacity:.5;filter:blur(3px);transition:opacity .7s}
+.hero-aurora:after{content:"";position:absolute;inset:0;background:linear-gradient(#05070810 0%,#05070808 35%,#05070824 67%,#050708c9 100%)}
+.hero-aurora[data-aurora=fallback] canvas{opacity:0}
+body[data-page=index] #experience{position:relative;padding-top:65px;scroll-margin-top:0}
+body[data-page=index] #experience .section-label{padding-top:23px}
+@media(max-width:640px){.home-hero.portfolio-hero{min-height:max(485px,calc(100svh - var(--hero-chrome)));padding:50px 0 90px;margin-bottom:0}.home-hero.portfolio-hero h1{font-size:72px;letter-spacing:-3px}.home-hero.portfolio-hero h1 span{font-size:15px;letter-spacing:6px;margin-top:21px}.portfolio-hero .hero-overline{margin-bottom:28px}.portfolio-hero .hero-actions{margin-top:31px}.portfolio-hero .hero-foot{bottom:28px}.aurora-canvas{opacity:.25;filter:blur(3px)}body[data-page=index] #experience{padding-top:44px}}
+@media(max-width:360px){.home-hero.portfolio-hero h1{font-size:61px}.home-hero.portfolio-hero{min-height:max(460px,calc(100svh - var(--hero-chrome)))}.home-hero.portfolio-hero h1 span{font-size:13px;letter-spacing:5px}}
+@media(max-width:640px){.aurora-canvas{opacity:.43;height:140%;filter:blur(2px)}}
+@media(prefers-reduced-motion:reduce){.aurora-canvas{transition:none}}
