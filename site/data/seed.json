@@ -1,6 +1,6 @@
 {
   "version": 4,
-  "revision": 59,
+  "revision": 60,
   "items": [
     {
       "id": "core-0",
@@ -631,17 +631,17 @@
       "contribution": ""
     },
     {
-      "sourceHash": "5797545807ef40e73d32b0b803b7a471c3932233574ed2b4d56f53706a84cd12",
-      "originalName": "item0_final_attempt1.png.webp",
+      "sourceHash": "acbda86889c47e12b4140bdb68f065d3089c5baa8e1c7dae8dc7f66fbc27b21b",
+      "originalName": "item0_final_attempt1.png",
       "collection": "woodworking",
       "title": "万圣节木饰 · 创意图解",
       "kind": "image",
-      "width": 216,
-      "height": 384,
-      "file": "https://sszcngotuuylyuawhuzb.supabase.co/storage/v1/object/public/portfolio-media/portfolio-v4/20260922/5797545807ef40e73d32b0b803b7a471c3932233574ed2b4d56f53706a84cd12.webp",
-      "poster": "https://sszcngotuuylyuawhuzb.supabase.co/storage/v1/object/public/portfolio-media/portfolio-v4/20260922/5797545807ef40e73d32b0b803b7a471c3932233574ed2b4d56f53706a84cd12.webp",
+      "width": 864,
+      "height": 1536,
+      "file": "https://sszcngotuuylyuawhuzb.supabase.co/storage/v1/object/public/portfolio-media/portfolio-v4/20260922/acbda86889c47e12b4140bdb68f065d3089c5baa8e1c7dae8dc7f66fbc27b21b.png",
+      "poster": "https://sszcngotuuylyuawhuzb.supabase.co/storage/v1/object/public/portfolio-media/portfolio-v4/20260922/acbda86889c47e12b4140bdb68f065d3089c5baa8e1c7dae8dc7f66fbc27b21b.png",
       "company": "杭州睿琪软件",
-      "updatedAt": "2026-09-22T06:55:59.049444+00:00",
+      "updatedAt": "2026-09-22T07:12:47.819987+00:00",
       "subtitle": "Woodsense · 图解创意素材",
       "id": "import-5797545807ef40e73d32",
       "description": "",
