@@ -1,11 +1,11 @@
 {
   "release": "2026-09-16-draft14",
-  "revision": 58,
-  "active_works": 34,
+  "revision": 59,
+  "active_works": 38,
   "collections": {
     "kuaishou": 18,
     "personal": 6,
-    "picturethis": 3,
-    "woodworking": 7
+    "picturethis": 5,
+    "woodworking": 9
   }
 }
