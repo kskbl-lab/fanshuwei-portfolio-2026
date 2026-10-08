@@ -2,6 +2,23 @@ const $ = (s,root=document) => root.querySelector(s);
 const $$ = (s,root=document) => [...root.querySelectorAll(s)];
 const esc = value => String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const products={picturethis:'PictureThis · 植物识别与养护',woodworking:'Woodsense · 木工制作'};
+function mediaStatus(host,{retry,live=false,slow=false}={}){
+ const element=document.createElement('span');element.className='media-status';element.hidden=true;
+ element.innerHTML='<span class="media-status-spinner" aria-hidden="true"></span><span class="media-status-text"></span>';
+ if(live){element.setAttribute('role','status');element.setAttribute('aria-live','polite');}
+ const message=element.querySelector('.media-status-text');let timer=0,retryButton;
+ if(retry){retryButton=document.createElement('button');retryButton.type='button';retryButton.className='media-retry';retryButton.textContent='重新加载';retryButton.addEventListener('click',retry);element.append(retryButton);}
+ host.append(element);
+ return {
+  set(state,text=''){
+   clearTimeout(timer);element.hidden=!state;element.dataset.state=state||'';message.textContent=text;
+   host.setAttribute('aria-busy',String(state==='loading'));
+   if(retryButton)retryButton.hidden=state!=='error';
+   if(state==='loading'&&slow)timer=setTimeout(()=>{message.textContent='加载较慢，请稍候…';},15000);
+  },
+  destroy(){clearTimeout(timer);element.remove();host.removeAttribute('aria-busy');}
+ };
+}
 // StarBorder's two moving radial highlights, clipped to the existing card edge.
 const starBorderMarkup='<span class="star-border-ring" aria-hidden="true"><span class="border-gradient-bottom"></span><span class="border-gradient-top"></span></span>';
 function decorateStarBorders(root=document){
@@ -75,6 +92,14 @@ function layoutMasonry(){
  schedulePreviews();
 }
 function scheduleMasonry(){if(!layoutFrame)layoutFrame=requestAnimationFrame(layoutMasonry);}
+$$('.media-card.image').forEach(card=>{
+ const img=$('img',card),status=mediaStatus($('.media-preview',card));
+ const loaded=()=>{status.set(null);scheduleMasonry();};
+ const failed=()=>{status.set('error','图片加载失败，点击查看或重试');scheduleMasonry();};
+ img.addEventListener('load',loaded,{signal});img.addEventListener('error',failed,{signal});
+ if(img.complete){if(img.naturalWidth)loaded();else failed();}else status.set('loading','图片加载中…');
+ cleanups.push(()=>status.destroy());
+});
 if(masonryGalleries.length){
  const widths=new WeakMap();
  const observer=new ResizeObserver(entries=>{for(const entry of entries){if(widths.get(entry.target)!==entry.contentRect.width){widths.set(entry.target,entry.contentRect.width);scheduleMasonry();}}});
@@ -85,12 +110,12 @@ if(masonryGalleries.length){
 }
 // Assign video sources only to visible cards; release decoders and requests on exit.
 const previewCards=$$('.masonry .media-card.video');
-const previews=new Map(),failedPreviews=new WeakSet();
+const previews=new Map();
 const reducedMotion=matchMedia('(prefers-reduced-motion:reduce)');
 let previewFrame=0,previewDisposed=false,pageAway=false;
 function stopCardPreview(card){
  const record=previews.get(card);if(!record)return;
- previews.delete(card);clearTimeout(record.timer);
+ previews.delete(card);clearTimeout(record.timer);record.status?.destroy();
  if(record.video){record.video.pause();record.video.removeAttribute('src');record.video.load();record.video.remove();}
  card.classList.remove('is-previewing');
 }
@@ -114,10 +139,8 @@ function syncPreviews(){
   // Prefer what is actually being viewed, with a small bias to avoid boundary flicker.
   return [{card,score:coverage*.55+centrality*.45+(previews.has(card)?.035:0)}];
  });
- const visibleCards=new Set(visible.map(candidate=>candidate.card));
- previewCards.forEach(card=>{if(!visibleCards.has(card))failedPreviews.delete(card);});
- // Bound concurrent downloads/decoding by visual priority, never catalog order.
- const wanted=new Set(visible.filter(({card})=>!failedPreviews.has(card)).sort((a,b)=>b.score-a.score).slice(0,innerWidth<=760?2:4).map(({card})=>card));
+// Bound concurrent downloads/decoding by visual priority, never catalog order.
+ const wanted=new Set(visible.sort((a,b)=>b.score-a.score).slice(0,innerWidth<=760?2:4).map(({card})=>card));
  [...previews.keys()].forEach(card=>{if(!wanted.has(card))stopCardPreview(card);});
  wanted.forEach(card=>{
   if(previews.has(card))return;
@@ -126,10 +149,11 @@ function syncPreviews(){
   record.timer=setTimeout(()=>{
    syncPreviews();if(previews.get(card)!==record)return;
    const item=pageItems.find(i=>i.id===card.dataset.item),video=document.createElement('video');
-   record.video=video;
+   record.video=video;record.status=mediaStatus($('.media-preview',card),{slow:true});record.status.set('loading','视频加载中…');
    video.className='hover-video';video.muted=true;video.defaultMuted=true;video.loop=true;video.playsInline=true;video.preload='none';video.setAttribute('aria-hidden','true');video.tabIndex=-1;
-   const failed=()=>{if(previews.get(card)!==record)return;failedPreviews.add(card);stopCardPreview(card);schedulePreviews();};
-   video.addEventListener('playing',()=>{if(previews.get(card)===record)card.classList.add('is-previewing');});
+   const failed=error=>{if(previews.get(card)!==record)return;video.pause();record.status.set(error?.name==='NotAllowedError'?'idle':'error',error?.name==='NotAllowedError'?'点击播放':'预览加载失败，点击重试');};
+   video.addEventListener('playing',()=>{if(previews.get(card)===record){record.status.set(null);card.classList.add('is-previewing');}});
+   video.addEventListener('waiting',()=>{if(previews.get(card)===record)record.status.set('loading','视频缓冲中…');});
    video.addEventListener('error',failed,{once:true});
    video.src=item.file;$('.media-preview',card).append(video);
    video.play().catch(failed);
@@ -167,10 +191,28 @@ if(pageItems.length){
  dialog=document.createElement('dialog');dialog.className='dialog';dialog.setAttribute('aria-labelledby','dialog-title');
  dialog.innerHTML='<div class="dialog-header"><h2 id="dialog-title"></h2><button class="dialog-close" aria-label="关闭作品详情">×</button></div><div class="dialog-content"><div class="dialog-media"></div><div class="dialog-details"></div></div><div class="dialog-controls"><button class="prev">← 上一件</button><span class="dialog-counter" aria-live="polite"></span><button class="next">下一件 →</button></div>';
  document.body.append(dialog);
- const stopMedia=()=>{const video=$('video',dialog);if(video){video.pause();video.removeAttribute('src');video.load();}};
+ let detailController,detailStatus;
+ const stopMedia=()=>{detailController?.abort();detailStatus?.destroy();const video=$('video',dialog);if(video){video.pause();video.removeAttribute('src');video.load();}};
  function renderItem(){
   stopMedia();const item=activeItems[selected];$('#dialog-title',dialog).textContent=item.title;
-  $('.dialog-media',dialog).innerHTML=item.kind==='video'?`<video src="${esc(item.file)}" poster="${esc(item.poster)}" controls playsinline preload="metadata" aria-label="${esc(item.title)}完整视频"></video>`:`<a href="${esc(item.file)}" target="_blank" rel="noopener" aria-label="打开${esc(item.title)}原图"><img src="${esc(item.file)}" alt="${esc(item.title)}完整作品"></a>`;
+  const host=$('.dialog-media',dialog);
+  host.innerHTML=item.kind==='video'?`<video poster="${esc(item.poster)}" controls playsinline preload="auto" aria-label="${esc(item.title)}完整视频"></video>`:`<a href="${esc(item.file)}" target="_blank" rel="noopener" aria-label="打开${esc(item.title)}原图"><img alt="${esc(item.title)}完整作品"></a>`;
+  detailController=new AbortController();const mediaSignal=detailController.signal;
+  const status=detailStatus=mediaStatus(host,{retry:renderItem,live:true,slow:true});
+  status.set('loading',item.kind==='video'?'视频加载中…':'图片加载中…');
+  const media=$(item.kind==='video'?'video':'img',host);
+  media.addEventListener('error',()=>status.set('error',item.kind==='video'?'视频加载失败，请重试':'图片加载失败，请重试'),{signal:mediaSignal});
+  if(item.kind==='video'){
+   media.addEventListener('loadstart',()=>status.set('loading','视频加载中…'),{signal:mediaSignal});
+   media.addEventListener('waiting',()=>status.set('loading','视频缓冲中…'),{signal:mediaSignal});
+   media.addEventListener('playing',()=>status.set(null),{signal:mediaSignal});
+   media.addEventListener('canplay',()=>{if(media.paused)status.set(null);},{signal:mediaSignal});
+   media.addEventListener('pause',()=>{if(!media.error)status.set(null);},{signal:mediaSignal});
+   media.src=item.file;
+   media.play().catch(error=>{if(mediaSignal.aborted)return;if(error.name==='AbortError'&&media.paused){status.set(null);return;}status.set(error.name==='NotAllowedError'?'idle':'error',error.name==='NotAllowedError'?'点击视频播放':'视频加载失败，请重试');});
+  }else{
+   media.addEventListener('load',()=>status.set(null),{signal:mediaSignal});media.src=item.file;
+  }
   $('.dialog-details',dialog).innerHTML=`<div class="eyebrow">${esc(item.company)} / ${item.kind==='video'?'VIDEO':'IMAGE'}</div><h3>${esc(item.detailLabel||'画面与内容')}</h3><p>${esc(item.description)}</p><h3>${esc(item.contributionLabel||'参与工作')}</h3><p>${esc(item.contribution)}</p>${item.fileId?`<h3>素材编号</h3><p>${esc(item.fileId)}</p>`:''}<button class="secondary-button edit-in-detail" data-edit="${esc(item.id)}">编辑此作品</button><br><a class="original-link" href="${esc(item.file)}" target="_blank" rel="noopener">${item.kind==='image'?'查看高清原图':'单独打开视频'} ↗</a>`;
   $('.dialog-counter',dialog).textContent=`${selected+1} / ${activeItems.length}`;$('.prev',dialog).disabled=selected===0;$('.next',dialog).disabled=selected===activeItems.length-1;
  }
