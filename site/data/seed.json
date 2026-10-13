@@ -1,6 +1,6 @@
 {
   "version": 4,
-  "revision": 63,
+  "revision": 64,
   "items": [
     {
       "id": "core-0",
@@ -18,7 +18,8 @@
       "contribution": "商业项目",
       "width": 1000,
       "height": 1098,
-      "collection": "kuaishou"
+      "collection": "kuaishou",
+      "previewFile": "assets/previews/3179fbfee5f54719d639f0bc-960-crf18-v1.mp4"
     },
     {
       "id": "core-2",
@@ -36,7 +37,8 @@
       "contribution": "AIGC项目",
       "width": 1000,
       "height": 2222,
-      "collection": "kuaishou"
+      "collection": "kuaishou",
+      "previewFile": "assets/legacy/kuaishou-1-h264.mp4"
     },
     {
       "id": "project-1783402722811-0.14653341104661377",
@@ -54,7 +56,8 @@
       "contribution": "商业画面特效",
       "width": 800,
       "height": 1067,
-      "collection": "kuaishou"
+      "collection": "kuaishou",
+      "previewFile": "assets/previews/447f7ff25f24eac489d52529-960-crf18-v1.mp4"
     },
     {
       "id": "core-1783403133884",
@@ -72,7 +75,8 @@
       "contribution": "个人项目",
       "width": 800,
       "height": 450,
-      "collection": "personal"
+      "collection": "personal",
+      "previewFile": "assets/previews/adfbff9e6d097391d4e0701f-960-crf18-v1.mp4"
     },
     {
       "id": "project-1783402680450-0.17513404898034768",
@@ -90,7 +94,8 @@
       "contribution": "商业画面特效",
       "width": 800,
       "height": 1067,
-      "collection": "kuaishou"
+      "collection": "kuaishou",
+      "previewFile": "assets/previews/922680a12304b2f7774efd4e-960-crf18-v1.mp4"
     },
     {
       "id": "project-1783402463756-0.9070773353293399",
@@ -108,7 +113,8 @@
       "contribution": "个人项目",
       "width": 800,
       "height": 450,
-      "collection": "personal"
+      "collection": "personal",
+      "previewFile": "assets/restored/8c4df400157ab452551a390d0b97831758b4bf09ee29ba7cde97c3f59a0aa996.mp4"
     },
     {
       "id": "core-1783402296632",
@@ -126,7 +132,8 @@
       "contribution": "AIGC项目",
       "width": 1000,
       "height": 2222,
-      "collection": "kuaishou"
+      "collection": "kuaishou",
+      "previewFile": "assets/legacy/kuaishou-2-h264.mp4"
     },
     {
       "id": "project-1783402640740-0.7934651934345283",
@@ -144,7 +151,8 @@
       "contribution": "商业转场",
       "width": 800,
       "height": 1067,
-      "collection": "kuaishou"
+      "collection": "kuaishou",
+      "previewFile": "assets/previews/2ea155290c79247453572a80-960-crf18-v1.mp4"
     },
     {
       "id": "project-0",
@@ -162,7 +170,8 @@
       "contribution": "商业人物特效",
       "width": 800,
       "height": 710,
-      "collection": "kuaishou"
+      "collection": "kuaishou",
+      "previewFile": "assets/restored/4f8008ca640331cfddfcbfc1f5655975403c59234b4eed8e7486b79c5d807d11.mp4"
     },
     {
       "id": "project-1783402751451-0.9875997512401563",
@@ -180,7 +189,8 @@
       "contribution": "商业画面特效",
       "width": 800,
       "height": 1067,
-      "collection": "kuaishou"
+      "collection": "kuaishou",
+      "previewFile": "assets/previews/bdbe73cf266a86551eab71f4-960-crf18-v1.mp4"
     },
     {
       "id": "project-1783402494285-0.38622414026289376",
@@ -198,7 +208,8 @@
       "contribution": "个人项目",
       "width": 800,
       "height": 450,
-      "collection": "personal"
+      "collection": "personal",
+      "previewFile": "assets/previews/80806c5e12958e646cd4973b-960-crf18-v1.mp4"
     },
     {
       "id": "project-1783402513945-0.6337370982745195",
@@ -216,7 +227,8 @@
       "contribution": "个人作品",
       "width": 800,
       "height": 450,
-      "collection": "personal"
+      "collection": "personal",
+      "previewFile": "assets/previews/509bc0405030f6b4b84c1725-960-crf18-v1.mp4"
     },
     {
       "id": "project-1783402534501-0.3094689770012361",
@@ -234,7 +246,8 @@
       "contribution": "个人作品",
       "width": 800,
       "height": 450,
-      "collection": "personal"
+      "collection": "personal",
+      "previewFile": "assets/previews/e410789eed6b81ea9e7bf04c-960-crf18-v1.mp4"
     },
     {
       "id": "project-1783402550380-0.4455373012203947",
@@ -252,7 +265,8 @@
       "contribution": "个人作品",
       "width": 800,
       "height": 360,
-      "collection": "personal"
+      "collection": "personal",
+      "previewFile": "assets/legacy/gallery-09-h264.mp4"
     },
     {
       "id": "project-1",
@@ -288,7 +302,8 @@
       "contribution": "商业文字模板",
       "width": 800,
       "height": 800,
-      "collection": "kuaishou"
+      "collection": "kuaishou",
+      "previewFile": "assets/previews/f103d09fa76c1388afd39d02-960-crf18-v1.mp4"
     },
     {
       "id": "project-3",
@@ -306,7 +321,8 @@
       "contribution": "商业项目",
       "width": 800,
       "height": 800,
-      "collection": "kuaishou"
+      "collection": "kuaishou",
+      "previewFile": "assets/previews/1010374f0c8459e1ec9d66bb-960-crf18-v1.mp4"
     },
     {
       "id": "project-1783402599850-0.7073848926261279",
@@ -324,7 +340,8 @@
       "contribution": "商业转场",
       "width": 800,
       "height": 1067,
-      "collection": "kuaishou"
+      "collection": "kuaishou",
+      "previewFile": "assets/previews/f5028eeab4a5e4870f159fea-960-crf18-v1.mp4"
     },
     {
       "id": "project-1783402665976-0.08635759362015738",
@@ -342,7 +359,8 @@
       "contribution": "商业画面特效",
       "width": 800,
       "height": 1067,
-      "collection": "kuaishou"
+      "collection": "kuaishou",
+      "previewFile": "assets/previews/bf383eb28e7a567161339b29-960-crf18-v1.mp4"
     },
     {
       "id": "project-1783402694888-0.04404972938027696",
@@ -360,7 +378,8 @@
       "contribution": "商业画面特效",
       "width": 800,
       "height": 1067,
-      "collection": "kuaishou"
+      "collection": "kuaishou",
+      "previewFile": "assets/previews/5d3a53b0862cda139648065b-960-crf18-v1.mp4"
     },
     {
       "id": "core-1783403130755",
@@ -396,7 +415,8 @@
       "contribution": "商业画面特效",
       "width": 800,
       "height": 1067,
-      "collection": "kuaishou"
+      "collection": "kuaishou",
+      "previewFile": "assets/previews/3ca1164454a35b1a716b1add-960-crf18-v1.mp4"
     },
     {
       "id": "project-1783402740522-0.05377570966729672",
@@ -414,7 +434,8 @@
       "contribution": "商业画面特效",
       "width": 800,
       "height": 1067,
-      "collection": "kuaishou"
+      "collection": "kuaishou",
+      "previewFile": "assets/previews/c3237f777b5d6f0f207fdd2d-960-crf18-v1.mp4"
     },
     {
       "id": "236640",
@@ -501,7 +522,8 @@
       "contribution": "",
       "originalName": "植物1.mp4",
       "sourceHash": "cbd30ad80f0a705fd6c3306a38b8a269ccc6ae99347d8be48471b3a757089e7b",
-      "updatedAt": "2026-09-14T12:24:18.401Z"
+      "updatedAt": "2026-09-14T12:24:18.401Z",
+      "previewFile": "assets/previews/cbd30ad80f0a705fd6c3306a-960-crf18-v1.mp4"
     },
     {
       "id": "import-ec9d3c6d9add28add2e6",
@@ -519,7 +541,8 @@
       "contribution": "",
       "originalName": "植物2.mp4",
       "sourceHash": "ec9d3c6d9add28add2e636b99b50218f42a0725fca32e9b2802a08f7349c74db",
-      "updatedAt": "2026-09-14T12:24:18.418Z"
+      "updatedAt": "2026-09-14T12:24:18.418Z",
+      "previewFile": "assets/previews/ec9d3c6d9add28add2e636b9-960-crf18-v1.mp4"
     },
     {
       "id": "import-c9af055e307a0ed3b14d",
@@ -537,7 +560,8 @@
       "contribution": "",
       "originalName": "植物3.mp4",
       "sourceHash": "c9af055e307a0ed3b14db9f52672cf30aa4d402ddd8c3109a310feaa56e055a9",
-      "updatedAt": "2026-09-14T12:24:18.444Z"
+      "updatedAt": "2026-09-14T12:24:18.444Z",
+      "previewFile": "assets/previews/c9af055e307a0ed3b14db9f5-960-crf18-v1.mp4"
     },
     {
       "id": "import-db7c5a7024cc78f0bf27",
@@ -555,7 +579,8 @@
       "contribution": "",
       "originalName": "1.mp4",
       "sourceHash": "db7c5a7024cc78f0bf278c07c4ff0d492ad7d635cfc788a8c09daf637a0f02e4",
-      "updatedAt": "2026-09-15T08:34:56.099Z"
+      "updatedAt": "2026-09-15T08:34:56.099Z",
+      "previewFile": "assets/previews/db7c5a7024cc78f0bf278c07-960-crf18-v1.mp4"
     },
     {
       "id": "import-1b62d1adeeda1d25f6cd",
@@ -573,7 +598,8 @@
       "contribution": "",
       "originalName": "2.mp4",
       "sourceHash": "1b62d1adeeda1d25f6cd36668e893f31289e362fb201f800904a0994c1e0fe88",
-      "updatedAt": "2026-09-15T08:34:56.101Z"
+      "updatedAt": "2026-09-15T08:34:56.101Z",
+      "previewFile": "assets/previews/1b62d1adeeda1d25f6cd3666-960-crf18-v1.mp4"
     },
     {
       "id": "import-15b383da222070ea1df7",
@@ -591,7 +617,8 @@
       "contribution": "",
       "originalName": "3.mp4",
       "sourceHash": "15b383da222070ea1df752db14f179ef2cd55ff3e1b5b12dcb3cc5c1bc3a6752",
-      "updatedAt": "2026-09-15T08:34:56.102Z"
+      "updatedAt": "2026-09-15T08:34:56.102Z",
+      "previewFile": "assets/previews/15b383da222070ea1df752db-960-crf18-v1.mp4"
     },
     {
       "collection": "kuaishou",
@@ -610,7 +637,8 @@
       "file": "assets/uploads/757ab69b-17ac-44e8-88ec-04ec61130844.mp4",
       "poster": "assets/uploads/210c6cf6-aa05-49f7-afca-7d3d1132a1c9.jpg",
       "deleted": false,
-      "updatedAt": "2026-09-16T10:49:07.005Z"
+      "updatedAt": "2026-09-16T10:49:07.005Z",
+      "previewFile": "assets/previews/cc1d42c8539b4dba9101b652-960-crf18-v1.mp4"
     },
     {
       "sourceHash": "b9cf96a290375d411997c6dda97d379613b01240805fb0b65674625f4b5f7475",
@@ -628,7 +656,8 @@
       "duration": 32.25,
       "id": "import-b9cf96a290375d411997",
       "description": "",
-      "contribution": ""
+      "contribution": "",
+      "previewFile": "assets/previews/b9cf96a290375d411997c6dd-960-crf18-v1.mp4"
     },
     {
       "sourceHash": "acbda86889c47e12b4140bdb68f065d3089c5baa8e1c7dae8dc7f66fbc27b21b",
@@ -663,7 +692,8 @@
       "duration": 33.33,
       "id": "import-b13f6ff3be109e30e949",
       "description": "",
-      "contribution": ""
+      "contribution": "",
+      "previewFile": "assets/previews/b13f6ff3be109e30e949ede7-960-crf18-v1.mp4"
     },
     {
       "sourceHash": "76af2a2216b77f8ae73f09abf851e9321a1e8f7e0c6876fa39e6f3ffd8a87969",
@@ -681,7 +711,8 @@
       "duration": 32.2,
       "id": "import-76af2a2216b77f8ae73f",
       "description": "",
-      "contribution": ""
+      "contribution": "",
+      "previewFile": "assets/previews/76af2a2216b77f8ae73f09ab-960-crf18-v1.mp4"
     }
   ],
   "release": "2026-09-16-draft14"

@@ -15,7 +15,16 @@ window.PortfolioStore=(()=>{
   return data;
  }
  async function readRow(){const rows=await request('/rest/v1/portfolio_state?id=eq.main&select=media,updated_at');if(!rows?.[0])throw Error('未找到云端作品目录。');return rows[0];}
- function catalog(row){const saved=row.media?.[catalogKey];return saved?.release===config.release&&Array.isArray(saved.items)?saved:structuredClone(seed);}
+ function catalog(row){
+  const saved=row.media?.[catalogKey];
+  if(saved?.release!==config.release||!Array.isArray(saved.items))return structuredClone(seed);
+  // Cloud edits keep their order and metadata. Attach shipped previews only when the original file still matches.
+  const shipped=new Map(seed.items.filter(item=>item.previewFile).map(item=>[item.id,item]));
+  return {...saved,items:saved.items.map(item=>{
+   const match=shipped.get(item.id);
+   return match&&match.file===item.file?{...item,previewFile:match.previewFile}:item;
+  })};
+ }
  const ready=(async()=>{try{state=catalog(await readRow());}catch{state=structuredClone(seed);}})();
  async function get(){await ready;return structuredClone(state);}
  async function authorize(){
@@ -46,7 +55,7 @@ window.PortfolioStore=(()=>{
  }
  function validRef(value){return typeof value==='string'&&(value.startsWith(config.url+'/storage/v1/object/public/portfolio-media/')||(/^assets\/[\w./-]+$/.test(value)&&!value.split('/').includes('..')));}
  async function save(item){
-  if(!collections[item.collection]||!['video','image'].includes(item.kind)||!item.id||!item.title?.trim()||!validRef(item.file)||!validRef(item.poster))throw Error('作品信息或素材路径无效。');
+  if(!collections[item.collection]||!['video','image'].includes(item.kind)||!item.id||!item.title?.trim()||!validRef(item.file)||!validRef(item.poster)||(item.previewFile&&!validRef(item.previewFile)))throw Error('作品信息或素材路径无效。');
   return change(next=>{const index=next.items.findIndex(i=>i.id===item.id);const value={...item,updatedAt:new Date().toISOString()};if(index<0)next.items.push(value);else next.items[index]=value;});
  }
  async function deleted(id,value){return change(next=>{const item=next.items.find(i=>i.id===id);if(!item)throw Error('未找到作品。');item.deleted=!!value;});}

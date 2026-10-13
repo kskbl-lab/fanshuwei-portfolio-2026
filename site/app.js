@@ -39,7 +39,7 @@ window.refreshPortfolio=async()=>{
  const state=await PortfolioStore.get();
  const resolved=await Promise.all(state.items.filter(i=>!i.deleted).map(i=>PortfolioStore.resolve(i)));
  cleanups.forEach(fn=>fn());cleanups=[];controller?.abort();controller=new AbortController();const signal=controller.signal;
- objectUrls.forEach(u=>URL.revokeObjectURL(u));objectUrls=resolved.flatMap(i=>[i.file,i.poster]).filter(u=>u?.startsWith('blob:'));
+ objectUrls.forEach(u=>URL.revokeObjectURL(u));objectUrls=resolved.flatMap(i=>[i.file,i.poster,i.previewFile]).filter(u=>u?.startsWith('blob:'));
  const collection=window.currentCollection();const pageItems=page==='index'?[]:resolved.filter(i=>i.collection===collection);
  $$('[data-count]').forEach(el=>el.textContent=resolved.filter(i=>i.collection===el.dataset.count).length);
  $$('[data-group-count]').forEach(el=>el.textContent=String(pageItems.filter(i=>i.group===el.dataset.groupCount).length).padStart(2,'0'));
@@ -132,7 +132,7 @@ function pausePreviews(){[...previews.keys()].forEach(pauseCardPreview);}
 function prunePreviews(){
  const limit=innerWidth<=760?4:8,now=Date.now();
  const inactive=[...previews.entries()].filter(([,r])=>!r.active).sort((a,b)=>a[1].lastUsed-b[1].lastUsed);
- inactive.forEach(([card,record])=>{if(!card.isConnected||previews.size>limit||now-record.lastUsed>=previewRetentionMs)stopCardPreview(card);});
+ inactive.forEach(([card,record],index)=>{if(!card.isConnected||inactive.length-index>limit||now-record.lastUsed>=previewRetentionMs)stopCardPreview(card);});
 }
 function playPreview(card,record){
  const video=record.video,attempt=++record.attempt;
@@ -151,20 +151,17 @@ function syncPreviews(){
  const returnNav=$('.return-nav'),navRect=returnNav?.getBoundingClientRect();
  // Exclude the strip covered by the sticky return bar from the viewing area.
  const viewTop=navRect&&navRect.top<=parseFloat(getComputedStyle(returnNav).top)+1?Math.max(0,navRect.bottom):0;
- const viewHeight=Math.max(1,innerHeight-viewTop),viewCenter=viewTop+viewHeight/2;
+ const viewHeight=Math.max(1,innerHeight-viewTop);
  const visible=previewCards.flatMap(card=>{
   if(!card.isConnected||card.closest('[hidden]'))return [];
   const r=$('.media-preview',card).getBoundingClientRect();
   const top=Math.max(r.top,viewTop),bottom=Math.min(r.bottom,innerHeight);
   const seen=Math.max(0,bottom-top),seenWidth=Math.max(0,Math.min(r.right,innerWidth)-Math.max(r.left,0));
   if(r.width<=0||r.height<=0||seenWidth<=0||seen<Math.min(r.height,viewHeight)*.15)return [];
-  const coverage=seen*seenWidth/(Math.min(r.height,viewHeight)*Math.min(r.width,innerWidth));
-  const centrality=1-Math.min(1,Math.abs((top+bottom)/2-viewCenter)/(viewHeight/2));
-  // Prefer what is actually being viewed, with a small bias to avoid boundary flicker.
-  return [{card,score:coverage*.55+centrality*.45+(previews.get(card)?.active ? .035 : 0)}];
+  return [card];
  });
-// Bound concurrent downloads/decoding by visual priority, never catalog order.
- const wanted=new Set(visible.sort((a,b)=>b.score-a.score).slice(0,innerWidth<=760?1:2).map(({card})=>card));
+ // Every substantially visible card plays; offscreen cards remain paused for a quick return.
+ const wanted=new Set(visible);
  [...previews.keys()].forEach(card=>{if(!wanted.has(card))pauseCardPreview(card);});
  wanted.forEach(card=>{
   const cached=previews.get(card);
@@ -187,7 +184,7 @@ function syncPreviews(){
    });
    video.addEventListener('waiting',()=>{if(previews.get(card)===record&&record.active)record.status.set('loading','视频缓冲中…');});
    video.addEventListener('error',()=>{if(previews.get(card)!==record)return;record.failed=true;video.pause();if(record.active)record.status.set('error','预览加载失败，点击重试');});
-   video.src=item.file;$('.media-preview',card).append(video);
+   video.src=item.previewFile||item.file;$('.media-preview',card).append(video);
    playPreview(card,record);
   },180);
  });

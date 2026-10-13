@@ -69,7 +69,7 @@
    else for(const file of files){
     message(`正在保存 ${completed+1} / ${files.length}：${file.name}`);const {posterFile,...media}=await inspect(file),ref=await store.upload(file),poster=posterFile?await store.upload(posterFile):ref;
     const item={...(old||{}),...meta,...media,id:old?.id||'upload-'+crypto.randomUUID(),file:ref,poster,title:files.length===1&&title?title:file.name.replace(/\.[^.]+$/,''),deleted:false};
-    if(old){delete item.fileId;delete item.originalFile;}await store.save(item);completed++;
+    if(old){delete item.fileId;delete item.originalFile;delete item.previewFile;}await store.save(item);completed++;
    }
    category.value=target;trash=false;$('#trash-toggle',dialog).setAttribute('aria-pressed','false');resetForm();await render();await window.refreshPortfolio();message(`已保存 ${completed} 件作品。${'已保存到云端，刷新或换设备后仍然保留。'}`);
   }catch(error){await render().catch(()=>{});await window.refreshPortfolio().catch(()=>{});message((completed?`已保存 ${completed} 件；剩余未保存。`:'')+error.message,true);}
