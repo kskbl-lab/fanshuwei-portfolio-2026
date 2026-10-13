@@ -108,22 +108,46 @@ if(masonryGalleries.length){
  window.addEventListener('resize',scheduleMasonry,{signal});
  scheduleMasonry();
 }
-// Assign video sources only to visible cards; release decoders and requests on exit.
+// Start only visible videos; keep a bounded recent set paused for return visits.
 const previewCards=$$('.masonry .media-card.video');
 const previews=new Map();
 const reducedMotion=matchMedia('(prefers-reduced-motion:reduce)');
+const previewRetentionMs=120000;
 let previewFrame=0,previewDisposed=false,pageAway=false;
 function stopCardPreview(card){
  const record=previews.get(card);if(!record)return;
- previews.delete(card);clearTimeout(record.timer);record.status?.destroy();
+ previews.delete(card);record.active=false;record.attempt++;clearTimeout(record.timer);record.status?.destroy();
  if(record.video){record.video.pause();record.video.removeAttribute('src');record.video.load();record.video.remove();}
  card.classList.remove('is-previewing');
 }
 function stopPreview(){[...previews.keys()].forEach(stopCardPreview);}
+function pauseCardPreview(card){
+ const record=previews.get(card);if(!record||!record.active)return;
+ if(!record.video){stopCardPreview(card);return;}
+ record.active=false;record.attempt++;record.lastUsed=Date.now();
+ // preload is a browser hint: retain buffered data without requesting more eagerly.
+ record.video.preload='none';record.video.pause();record.status.set(null);
+}
+function pausePreviews(){[...previews.keys()].forEach(pauseCardPreview);}
+function prunePreviews(){
+ const limit=innerWidth<=760?4:8,now=Date.now();
+ const inactive=[...previews.entries()].filter(([,r])=>!r.active).sort((a,b)=>a[1].lastUsed-b[1].lastUsed);
+ inactive.forEach(([card,record])=>{if(!card.isConnected||previews.size>limit||now-record.lastUsed>=previewRetentionMs)stopCardPreview(card);});
+}
+function playPreview(card,record){
+ const video=record.video,attempt=++record.attempt;
+ const failed=error=>{
+  if(previews.get(card)!==record||!record.active||attempt!==record.attempt)return;
+  if(error?.name==='AbortError')return;
+  record.failed=true;video.pause();record.status.set(error?.name==='NotAllowedError'?'idle':'error',error?.name==='NotAllowedError'?'点击播放':'预览加载失败，点击重试');
+ };
+ if(video.readyState<3)record.status.set('loading','视频加载中…');
+ video.play().catch(failed);
+}
 function syncPreviews(){
  previewFrame=0;
  if(previewDisposed)return;
- if(pageAway||document.hidden||reducedMotion.matches||document.body.classList.contains('modal-open')||document.querySelector('dialog[open]')){stopPreview();return;}
+ if(pageAway||document.hidden||reducedMotion.matches||document.body.classList.contains('modal-open')||document.querySelector('dialog[open]')){pausePreviews();prunePreviews();return;}
  const returnNav=$('.return-nav'),navRect=returnNav?.getBoundingClientRect();
  // Exclude the strip covered by the sticky return bar from the viewing area.
  const viewTop=navRect&&navRect.top<=parseFloat(getComputedStyle(returnNav).top)+1?Math.max(0,navRect.bottom):0;
@@ -137,28 +161,37 @@ function syncPreviews(){
   const coverage=seen*seenWidth/(Math.min(r.height,viewHeight)*Math.min(r.width,innerWidth));
   const centrality=1-Math.min(1,Math.abs((top+bottom)/2-viewCenter)/(viewHeight/2));
   // Prefer what is actually being viewed, with a small bias to avoid boundary flicker.
-  return [{card,score:coverage*.55+centrality*.45+(previews.has(card)?.035:0)}];
+  return [{card,score:coverage*.55+centrality*.45+(previews.get(card)?.active ? .035 : 0)}];
  });
 // Bound concurrent downloads/decoding by visual priority, never catalog order.
- const wanted=new Set(visible.sort((a,b)=>b.score-a.score).slice(0,innerWidth<=760?2:4).map(({card})=>card));
- [...previews.keys()].forEach(card=>{if(!wanted.has(card))stopCardPreview(card);});
+ const wanted=new Set(visible.sort((a,b)=>b.score-a.score).slice(0,innerWidth<=760?1:2).map(({card})=>card));
+ [...previews.keys()].forEach(card=>{if(!wanted.has(card))pauseCardPreview(card);});
  wanted.forEach(card=>{
-  if(previews.has(card))return;
-  const record={video:null,timer:0};previews.set(card,record);
+  const cached=previews.get(card);
+  if(cached){
+   if(cached.active)return;
+   if(cached.failed)stopCardPreview(card);
+   else{cached.active=true;cached.lastUsed=Date.now();playPreview(card,cached);return;}
+  }
+  const record={video:null,timer:0,active:true,lastUsed:Date.now(),attempt:0,failed:false};previews.set(card,record);
   // Avoid starting downloads for cards passed during a quick scroll.
   record.timer=setTimeout(()=>{
-   syncPreviews();if(previews.get(card)!==record)return;
+   record.timer=0;syncPreviews();if(previews.get(card)!==record||!record.active)return;
    const item=pageItems.find(i=>i.id===card.dataset.item),video=document.createElement('video');
    record.video=video;record.status=mediaStatus($('.media-preview',card),{slow:true});record.status.set('loading','视频加载中…');
    video.className='hover-video';video.muted=true;video.defaultMuted=true;video.loop=true;video.playsInline=true;video.preload='none';video.setAttribute('aria-hidden','true');video.tabIndex=-1;
-   const failed=error=>{if(previews.get(card)!==record)return;video.pause();record.status.set(error?.name==='NotAllowedError'?'idle':'error',error?.name==='NotAllowedError'?'点击播放':'预览加载失败，点击重试');};
-   video.addEventListener('playing',()=>{if(previews.get(card)===record){record.status.set(null);card.classList.add('is-previewing');}});
-   video.addEventListener('waiting',()=>{if(previews.get(card)===record)record.status.set('loading','视频缓冲中…');});
-   video.addEventListener('error',failed,{once:true});
+   video.addEventListener('playing',()=>{
+    if(previews.get(card)!==record)return;
+    if(!record.active||document.hidden||document.body.classList.contains('modal-open')){video.pause();return;}
+    record.status.set(null);card.classList.add('is-previewing');
+   });
+   video.addEventListener('waiting',()=>{if(previews.get(card)===record&&record.active)record.status.set('loading','视频缓冲中…');});
+   video.addEventListener('error',()=>{if(previews.get(card)!==record)return;record.failed=true;video.pause();if(record.active)record.status.set('error','预览加载失败，点击重试');});
    video.src=item.file;$('.media-preview',card).append(video);
-   video.play().catch(failed);
+   playPreview(card,record);
   },180);
  });
+ prunePreviews();
 }
 function schedulePreviews(){if(!previewDisposed&&!previewFrame)previewFrame=requestAnimationFrame(syncPreviews);}
 const previewVisibility='IntersectionObserver' in window?new IntersectionObserver(schedulePreviews,{threshold:[0,.05,.15,.3,.6,1]}):null;
@@ -166,17 +199,18 @@ previewCards.forEach(card=>previewVisibility?.observe($('.media-preview',card)))
 // Scroll also handles very tall cards and moving between two partially visible rows.
 window.addEventListener('scroll',schedulePreviews,{passive:true,signal});
 window.addEventListener('resize',schedulePreviews,{passive:true,signal});
-document.addEventListener('visibilitychange',()=>{if(document.hidden)stopPreview();else schedulePreviews();},{signal});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)pausePreviews();else schedulePreviews();},{signal});
 window.addEventListener('pagehide',()=>{pageAway=true;stopPreview();},{signal});
 window.addEventListener('pageshow',()=>{pageAway=false;schedulePreviews();},{signal});
 reducedMotion.addEventListener('change',schedulePreviews,{signal});
 const previewModals=new MutationObserver(schedulePreviews);
 previewModals.observe(document.body,{attributes:true,attributeFilter:['class','open'],subtree:true});
-cleanups.push(()=>{previewDisposed=true;stopPreview();previewVisibility?.disconnect();previewModals.disconnect();if(previewFrame)cancelAnimationFrame(previewFrame);});
+const previewExpiry=setInterval(prunePreviews,30000);
+cleanups.push(()=>{previewDisposed=true;clearInterval(previewExpiry);stopPreview();previewVisibility?.disconnect();previewModals.disconnect();if(previewFrame)cancelAnimationFrame(previewFrame);});
 schedulePreviews();
 $$('.filter').forEach(b=>b.replaceWith(b.cloneNode(true)));
 $$('.filter').forEach(button=>button.addEventListener('click',()=>{
- stopPreview();
+ pausePreviews();
  const filter=button.dataset.filter;
  $$('.filter').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
  $$('.media-card').forEach(card=>card.hidden=filter!=='all'&&card.dataset.kind!==filter);
@@ -217,7 +251,7 @@ if(pageItems.length){
   $('.dialog-counter',dialog).textContent=`${selected+1} / ${activeItems.length}`;$('.prev',dialog).disabled=selected===0;$('.next',dialog).disabled=selected===activeItems.length-1;
  }
  $$('.media-card').forEach(card=>card.addEventListener('click',()=>{
-  stopPreview();
+  pausePreviews();
   const visibleIds=$$('.media-card').filter(c=>!c.closest('[hidden]')).map(c=>c.dataset.item);
   activeItems=visibleIds.map(id=>pageItems.find(i=>i.id===id));selected=activeItems.findIndex(i=>i.id===card.dataset.item);lastTrigger=card;renderItem();document.body.classList.add('modal-open');dialog.showModal();$('.dialog-close',dialog).focus();
  }));
